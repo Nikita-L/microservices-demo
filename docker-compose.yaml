@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   frontend:
     build: ./frontend
@@ -46,16 +46,30 @@ services:
     restart: unless-stopped
 
   users-api:
-    build: ./users-api
-    image: users-api
+    build: users-api
     environment:
-     SERVER_PORT: 8083
-     JWT_SECRET: myfancysecret
-     SPRING_ZIPKIN_BASE_URL: http://zipkin:9411
+      JWT_SECRET: myfancysecret
+      ZIPKIN_BASE_URL: http://zipkin:9411
+      DATABASE_URL: postgres://api:api@users-api-db:5432/main
     depends_on:
       - zipkin
+      - users-api-db
+    volumes:
+      - ./users-api/src:/src
+    ports:
+      - 9412:8083
     restart: unless-stopped
-     
+
+  users-api-db:
+    image: postgres
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: api
+      POSTGRES_PASSWORD: api
+      POSTGRES_DB: main
+    restart: unless-stopped
+
   log-message-processor:
     build: ./log-message-processor
     image: log-message-processor

@@ -1,14 +1,10 @@
-FROM openjdk:8-alpine
+FROM python:3.7
+ENV PYTHONUNBUFFERED 1
 
-EXPOSE 8083
-WORKDIR /usr/src/app
+ADD ./requirements.txt /requirements.txt
 
+RUN pip install -r /requirements.txt
 
-COPY pom.xml mvnw ./
-COPY .mvn/ ./.mvn
-RUN ./mvnw dependency:resolve
+ADD ./src/ /src
 
-COPY . .
-RUN ./mvnw install
-
-CMD ["java", "-jar", "./target/users-api-0.0.1-SNAPSHOT.jar"]
+CMD python /src/main.py
