@@ -28,8 +28,11 @@ log-zipkin:
 log-redis-queue:
 	docker-compose logs -f redis-queue
 
-exec:
-	docker-compose exec frontend bash
+exec-db-users-api:
+	docker-compose exec users-api-db bash
+
+exec-db-todos-api:
+	docker-compose exec todos-api-db bash
 
 down:
 	docker-compose down

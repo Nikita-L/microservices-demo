@@ -45,6 +45,18 @@ services:
       - redis-queue
     restart: unless-stopped
 
+  todos-api-db:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGODB_DATABASE: test
+      MONGODB_USERNAME: api
+      MONGODB_PASSWORD: api
+    volumes:
+      - ./todos-api/initDB.js:/docker-entrypoint-initdb.d/initDB.js
+    expose:
+      - 27017
+
   users-api:
     build: users-api
     environment:
@@ -56,8 +68,8 @@ services:
       - users-api-db
     volumes:
       - ./users-api/src:/src
-    ports:
-      - 9412:8083
+    expose:
+      - 8083
     restart: unless-stopped
 
   users-api-db:
