@@ -57,20 +57,40 @@ db.session.commit()
 def validate_jwt():
     auth_h = request.headers.get('Authorization')
     if not auth_h:
+        print('No authorization provided')
         return 'No authorization provided', 401
 
     if not auth_h.startswith('Bearer '):
+        print('Unknown token type')
         return 'Unknown token type', 401
 
     token = auth_h[7:]
     try:
         jwt.decode(token, os.getenv('JWT_SECRET'), algorithms='HS256')
     except jwt.ExpiredSignatureError:
+        print('JWT is expired')
         return 'JWT is expired', 401
+    print('Valid token provided, processing...')
+
+
+@app.route('/users/')
+def get_users():
+    users = User.query.all()
+
+    result = []
+    for user in users:
+        result.append({
+            'username': user.username,
+            'firstname': user.firstname,
+            'lastname': user.lastname,
+            'role': 'ADMIN' if user.role else 'USER'
+        })
+    print(result)
+    return jsonify(result)
 
 
 @app.route('/users/<username>/')
-def show_user_profile(username):
+def get_user(username):
     user = User.query.filter(User.username == username).first()
 
     if not user:
@@ -82,6 +102,7 @@ def show_user_profile(username):
         'lastname': user.lastname,
         'role': 'ADMIN' if user.role else 'USER'
     }
+    print(result)
     return jsonify(result)
 
 

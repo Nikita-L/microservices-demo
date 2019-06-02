@@ -7,6 +7,9 @@ rebuild:
 	docker-compose up --build -d
 	docker-compose ps
 
+log-all:
+	docker-compose logs -f frontend auth-api todos-api users-api log-message-processor
+
 log-frontend:
 	docker-compose logs -f frontend
 
