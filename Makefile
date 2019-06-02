@@ -2,6 +2,7 @@
 up:
 	docker-compose up -d
 	docker-compose ps
+	sleep 10 && make setup-db-todos-cluster
 
 rebuild:
 	docker-compose up --build -d
@@ -31,8 +32,17 @@ log-redis-queue:
 exec-db-users-api:
 	docker-compose exec users-api-db bash
 
-exec-db-todos-api:
-	docker-compose exec todos-api-db bash
+exec-db-todos-api-1:
+	docker-compose exec todos-api-db-1 mongo
+
+exec-db-todos-api-2:
+	docker-compose exec todos-api-db-2 mongo --eval "rs.slaveOk()" --shell
+
+exec-db-todos-api-3:
+	docker-compose exec todos-api-db-3 mongo --eval "rs.slaveOk()" --shell
+
+setup-db-todos-cluster:
+	docker-compose exec todos-api-db-1 mongo --eval "load('/setupDBCluster.js')" && sleep 20 && docker-compose exec todos-api-db-1 mongo --eval "load('/initDB.js')"
 
 down:
 	docker-compose down

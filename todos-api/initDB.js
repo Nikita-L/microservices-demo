@@ -18,6 +18,6 @@ db.todos.insertMany([
   },
   {
     username: 'admin',
-    content: 'Visit admin panel'
-  },
+    content: 'Fix admin panel'
+  }
 ]);
