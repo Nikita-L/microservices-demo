@@ -1,8 +1,8 @@
 # Docker compose commands
 up:
 	docker-compose up -d
-	docker-compose ps
 	sleep 10 && make setup-db-todos-cluster
+	docker-compose ps
 
 rebuild:
 	docker-compose up --build -d

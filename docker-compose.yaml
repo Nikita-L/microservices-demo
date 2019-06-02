@@ -2,7 +2,6 @@ version: '3'
 services:
   frontend:
     build: ./frontend
-    image: frontend
     environment:
       PORT: 8080
       AUTH_API_ADDRESS: http://auth-api:8081
