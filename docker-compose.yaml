@@ -2,7 +2,6 @@ version: '3'
 services:
   frontend:
     build: ./frontend
-    image: frontend
     environment:
       PORT: 8080
       AUTH_API_ADDRESS: http://auth-api:8081
@@ -43,7 +42,50 @@ services:
     depends_on:
       - zipkin
       - redis-queue
+      - todos-api-db-1
     restart: unless-stopped
+
+  todos-api-db-1:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGODB_DATABASE: test
+      MONGODB_USERNAME: api
+      MONGODB_PASSWORD: api
+    volumes:
+      - ./todos-api/initDB.js:/initDB.js
+      - ./todos-api/setupDBCluster.js:/setupDBCluster.js
+    expose:
+      - 27017
+    restart: unless-stopped
+    depends_on:
+      - todos-api-db-2
+      - todos-api-db-3
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+
+  todos-api-db-2:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGODB_DATABASE: test
+      MONGODB_USERNAME: api
+      MONGODB_PASSWORD: api
+    expose:
+      - 27017
+    restart: unless-stopped
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+
+  todos-api-db-3:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGODB_DATABASE: test
+      MONGODB_USERNAME: api
+      MONGODB_PASSWORD: api
+    expose:
+      - 27017
+    restart: unless-stopped
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
 
   users-api:
     build: users-api
@@ -56,8 +98,8 @@ services:
       - users-api-db
     volumes:
       - ./users-api/src:/src
-    ports:
-      - 9412:8083
+    expose:
+      - 8083
     restart: unless-stopped
 
   users-api-db:

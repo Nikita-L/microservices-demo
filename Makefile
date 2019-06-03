@@ -1,6 +1,7 @@
 # Docker compose commands
 up:
 	docker-compose up -d
+	sleep 10 && make setup-db-todos-cluster
 	docker-compose ps
 
 rebuild:
@@ -31,8 +32,20 @@ log-zipkin:
 log-redis-queue:
 	docker-compose logs -f redis-queue
 
-exec:
-	docker-compose exec frontend bash
+exec-db-users-api:
+	docker-compose exec users-api-db bash
+
+exec-db-todos-api-1:
+	docker-compose exec todos-api-db-1 mongo
+
+exec-db-todos-api-2:
+	docker-compose exec todos-api-db-2 mongo --eval "rs.slaveOk()" --shell
+
+exec-db-todos-api-3:
+	docker-compose exec todos-api-db-3 mongo --eval "rs.slaveOk()" --shell
+
+setup-db-todos-cluster:
+	docker-compose exec todos-api-db-1 mongo --eval "load('/setupDBCluster.js')" && sleep 20 && docker-compose exec todos-api-db-1 mongo --eval "load('/initDB.js')"
 
 down:
 	docker-compose down
