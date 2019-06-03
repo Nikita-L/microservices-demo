@@ -1,19 +1,24 @@
 version: '3'
 services:
-  frontend:
+  angular-service:
+    container_name: frontend
     build: ./frontend
     environment:
-      PORT: 8080
+      PORT: 4200
       AUTH_API_ADDRESS: http://auth-api:8081
       TODOS_API_ADDRESS: http://todos-api:8082
       ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+    volumes:
+      - './frontend:/usr/src/app'
     ports:
-      - 8080:8080
+      - 4200:4200
     depends_on:
       - zipkin
       - auth-api
       - todos-api
       - users-api
+    command: >
+      bash -c "npm install && ng serve --host 0.0.0.0 --port 4200"
     restart: unless-stopped
 
   auth-api:
@@ -105,7 +110,7 @@ services:
   users-api-db:
     image: postgres
     expose:
-      - "5432"
+      - 5432
     environment:
       POSTGRES_USER: api
       POSTGRES_PASSWORD: api
@@ -133,4 +138,10 @@ services:
 
   redis-queue:
     image: redis
+    restart: unless-stopped
+
+  hazelcast:
+    image: hazelcast/hazelcast:latest
+    ports:
+      - 5701:5701
     restart: unless-stopped
