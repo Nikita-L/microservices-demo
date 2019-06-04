@@ -14,7 +14,7 @@ export class TodoService {
       'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('currentUser'))
     });
 
-    return this.http.get<Todo[]>('http://todos-api:8082/todos', { headers: reqHeader });
+    return this.http.get<Todo[]>('http://localhost:8082/todos', { headers: reqHeader });
   }
 
   create(todo: Todo) {
