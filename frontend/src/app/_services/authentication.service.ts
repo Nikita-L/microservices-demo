@@ -15,7 +15,7 @@ export class AuthenticationService {
                 // login successful if there's a jwt token in the response
                 if (response && response.accessToken) {
 
-                   HazelcastService.getInstance().insertPerson(response.accessToken);
+                   //HazelcastService.getInstance().insertPerson(response.accessToken);
 
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(response.accessToken));
