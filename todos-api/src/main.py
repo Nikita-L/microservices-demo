@@ -126,7 +126,7 @@ def add_todo():
 @app.route('/todos/<id_>', methods=['DELETE'])
 def delete_todo(id_):
     try:
-        db.todos.delete_one({'_id': g.username, 'username': g.username})
+        db.todos.delete_one({'_id': id_, 'username': g.username})
     except:
         time.sleep(15)
         return 'DB problem, please wait', 400
