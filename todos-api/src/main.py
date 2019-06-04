@@ -32,7 +32,7 @@ def set_cors(response):
     response.headers['Access-Control-Allow-Origin'] = request.headers.get(
         'Origin', '*'
     )
-    response.headers['Access-Control-Allow-Methods'] = request.method
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, DELETE'
     response.headers['Access-Control-Allow-Headers'] = ALLOWED_HEADERS
     response.headers['Access-Control-Allow-Credentials'] = 'true'
 
