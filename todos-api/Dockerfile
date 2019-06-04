@@ -1,12 +1,10 @@
-FROM node:8-alpine
+FROM python:3.7
+ENV PYTHONUNBUFFERED 1
 
-EXPOSE 8082
+ADD ./requirements.txt /requirements.txt
 
-WORKDIR /usr/src/app
+RUN pip install -r /requirements.txt
 
-COPY package.json ./
-RUN npm install
+ADD ./src/ /src
 
-COPY . .
-
-CMD ["sh", "-c", "npm start" ]
+CMD python /src/main.py
