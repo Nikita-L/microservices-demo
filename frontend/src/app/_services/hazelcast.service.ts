@@ -12,7 +12,7 @@ export class HazelcastService {
           HazelcastService.instance = new HazelcastService();
 
           let config = new Config.ClientConfig();
-          config.networkConfig.addresses.push('0.0.0.0:5701');
+          config.networkConfig.addresses.push('http://localhost:5701');
 
           Client.newHazelcastClient(config).then(function (client) {
               console.log(client);
@@ -24,10 +24,11 @@ export class HazelcastService {
   }
 
   insertPerson(accessToken) {
-      HazelcastService.instance.client.getMap('persons').
-      put(accessToken, accessToken).then(function (previousValue) {
-          console.log("Insert value: ", previousValue);
-      });
+    console.log(HazelcastService.instance.client);
+      // HazelcastService.instance.client.getMap('persons').
+      // put(accessToken, accessToken).then(function (previousValue) {
+      //     console.log("Insert value: ", previousValue);
+      // });
   };
 }
 

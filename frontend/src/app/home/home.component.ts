@@ -13,11 +13,7 @@ export class HomeComponent implements OnInit {
     currentTodo: Todo;
     todoText: string;
 
-    todos: Todo[] = [{id: 10, content: "Hello"},
-      {id: 10, content: "Hello"},
-      {id: 10, content: "Nazar"},
-      {id: 10, content: "Hello"},
-      {id: 10, content: "Hello"}];
+    todos: Todo[] = [];
 
     constructor(private userService: UserService,
                 private todoService: TodoService,
@@ -51,6 +47,9 @@ export class HomeComponent implements OnInit {
 
     createTodo() {
       this.loading = true;
+
+      console.log(this.todoText)
+
       let todo = new Todo(null, this.todoText);
 
       this.todoText = "";
