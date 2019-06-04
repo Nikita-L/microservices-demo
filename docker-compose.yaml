@@ -29,6 +29,8 @@ services:
       JWT_SECRET: myfancysecret
       USERS_API_ADDRESS: http://users-api:8083
       ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+    ports:
+      - 8081:8081
     depends_on:
       - zipkin
       - users-api

@@ -15,7 +15,6 @@ class TodoController {
 
     list (req, res) {
         const data = this._getTodoData(req.user.username)
-
         res.json(data.items)
     }
 

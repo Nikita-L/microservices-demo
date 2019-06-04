@@ -8,20 +8,13 @@ export class AuthenticationService {
 
     login(username: string, password: string) {
 
-      // const httpOptions = {
-      //   headers: new HttpHeaders({
-      //     'Content-Type':  'application/json',
-      //     'Authorization': 'my-auth-token'
-      //   })
-      // };
-
-      return this.http.post<any>(`http://0.0.0.0:8081/login`, { username: username, password: password })
+      return this.http.post<any>('http://localhost:8081/login', { username: username, password: password })
           .pipe(map(response => {
               console.log(response);
               // login successful if there's a jwt token in the response
-              if (response && response.token) {
+              if (response && response.accessToken) {
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
-                  localStorage.setItem('currentUser', JSON.stringify(response));
+                  localStorage.setItem('currentUser', JSON.stringify(response.accessToken));
               }
 
               return response;
