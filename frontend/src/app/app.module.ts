@@ -13,7 +13,7 @@ import { routing }        from './app.routing';
 import { AlertComponent } from './_directives';
 import { AuthGuard } from './_guards';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import {AlertService, AuthenticationService, TodoService, UserService} from './_services';
+import {AlertService, AuthenticationService, HazelcastService, TodoService, UserService} from './_services';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
@@ -39,6 +39,7 @@ import { RegisterComponent } from './register';
         AuthenticationService,
         UserService,
         TodoService,
+        HazelcastService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 

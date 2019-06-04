@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { HazelcastService } from './hazelcast.service'
 
 @Injectable()
 export class AuthenticationService {
@@ -8,17 +9,20 @@ export class AuthenticationService {
 
     login(username: string, password: string) {
 
-      return this.http.post<any>('http://localhost:8081/login', { username: username, password: password })
-          .pipe(map(response => {
-              console.log(response);
-              // login successful if there's a jwt token in the response
-              if (response && response.accessToken) {
-                  // store user details and jwt token in local storage to keep user logged in between page refreshes
-                  localStorage.setItem('currentUser', JSON.stringify(response.accessToken));
-              }
+        return this.http.post<any>('http://localhost:8081/login', { username: username, password: password })
+            .pipe(map(response => {
+                console.log(response);
+                // login successful if there's a jwt token in the response
+                if (response && response.accessToken) {
 
-              return response;
-          }));
+                   HazelcastService.getInstance().insertPerson(response.accessToken);
+
+                    // store user details and jwt token in local storage to keep user logged in between page refreshes
+                    localStorage.setItem('currentUser', JSON.stringify(response.accessToken));
+                }
+
+                return response;
+            }));
     }
 
     logout() {
