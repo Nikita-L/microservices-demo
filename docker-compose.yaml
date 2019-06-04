@@ -41,7 +41,6 @@ services:
     build: ./todos-api
     image: todos-api
     environment:
-      TODO_API_PORT: 8082
       JWT_SECRET: myfancysecret
       REDIS_HOST: redis-queue
       REDIS_PORT: 6379
@@ -49,10 +48,14 @@ services:
       ZIPKIN_URL: http://zipkin:9411/api/v2/spans
     ports:
       - 8082:8082
+    volumes:
+      - ./todos-api/src:/src
     depends_on:
       - zipkin
       - redis-queue
       - todos-api-db-1
+      - todos-api-db-2
+      - todos-api-db-3
     restart: unless-stopped
 
   todos-api-db-1:
