@@ -7,7 +7,7 @@ import redis
 from pymongo import MongoClient
 import jwt
 
-from utils import random_with_N_digits
+from utils import random_with_N_digits, ALLOWED_HEADERS
 
 
 app = Flask('todos-api')
@@ -25,6 +25,24 @@ MongoClient('todos-api-db-3', replicaSet='rs0', serverSelectionTimeoutMS=5000, s
 db = MongoClient(
     'todos-api-db-1', replicaSet='rs0', serverSelectionTimeoutMS=5000, socketTimeoutMS=5000, connectTimeoutMS=5000
 ).test
+
+
+@app.after_request
+def set_cors(response):
+    response.headers['Access-Control-Allow-Origin'] = request.headers.get(
+        'Origin', '*'
+    )
+    response.headers['Access-Control-Allow-Methods'] = request.method
+    response.headers['Access-Control-Allow-Headers'] = ALLOWED_HEADERS
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+
+    return response
+
+
+@app.before_request
+def handle_options():
+    if request.method == 'OPTIONS':
+        return '', 200
 
 
 @app.before_request

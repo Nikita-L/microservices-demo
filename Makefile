@@ -11,8 +11,8 @@ rebuild:
 log-all:
 	docker-compose logs -f frontend auth-api todos-api users-api log-message-processor
 
-log-frontend:
-	docker-compose logs -f frontend
+log-angular-service:
+	docker-compose logs -f angular-service
 
 log-auth-api:
 	docker-compose logs -f auth-api
