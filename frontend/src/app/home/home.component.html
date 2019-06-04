@@ -1,22 +1,32 @@
-<h1>Hi {{currentUser.firstName}}!</h1>
+<h1>Hi!</h1>
 <p>You're logged in your TodoList</p>
+
+<div>
+  <label>Add new todo item: </label>
+    <input placeholder="Todo text" [ngModel]="todoText"/>
+    <br>
+    <button [disabled]="loading" (click)="createTodo()" class="btn btn-primary">Add new</button>
+    <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+</div>
+
 <ul class="heroes">
-  <li *ngFor="let user of users"
-      [class.selected]="user === selectedUser"
-      (click)="onSelect(user)">
-    <span class="badge">{{user.id}}</span> {{user.firstName}}
+  <li *ngFor="let todo of todos"
+      [class.selected]="todo === currentTodo"
+      (click)="onSelect(todo)">
+      <span class="badge">{{todo.id}}</span>
+      {{todo.content}}
+      <a (click)="deleteTodo(todo.id)" class="align-right">x</a>
   </li>
 </ul>
 
-<div *ngIf="selectedUser">
+<!--<div *ngIf="currentTodo">-->
 
-  <h2>{{selectedUser.lastName | uppercase}} Details</h2>
-  <div><span>id: </span>{{selectedUser.id}}</div>
-  <div>
-    <label>name:
-      <input [(ngModel)]="selectedUser.firstName" placeholder="name"/>
-    </label>
-  </div>
+<!--  <h2>{{currentTodo.id.toString() | uppercase}} Details</h2>-->
+<!--  <div>-->
+<!--    <label>name:-->
+<!--      <input [(ngModel)]="currentTodo.content" placeholder="name"/>-->
+<!--    </label>-->
+<!--  </div>-->
 
-</div>
+<!--</div>-->
 <p><a [routerLink]="['/login']">Logout</a></p>

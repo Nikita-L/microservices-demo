@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
-
-import {Todo, User} from '../_models';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Todo} from '../_models';
 import {TodoService, UserService} from '../_services';
 
 @Component({
@@ -9,34 +9,29 @@ import {TodoService, UserService} from '../_services';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+    loading = false;
+    currentTodo: Todo;
+    todoText: string;
 
-    currentUser: User;
-    selectedUser: User;
-    users: User[] = [
-      new User(11, 'Dr Nice', 'pass', 'Nazar', 'Dranhovskyi'),
-      new User(11, 'Dr Nice', 'pass', 'Nazar', 'Dranhovskyi'),
-      new User(11, 'Dr Nice', 'pass', 'Nazar', 'Dranhovskyi'),
-      new User(11, 'Dr Nice', 'pass', 'Nazar', 'Dranhovskyi'),
-      new User(11, 'Dr Nice', 'pass', 'Nazar', 'Dranhovskyi'),
-      new User(11, 'Dr Nice', 'pass', 'Nazar', 'Dranhovskyi'),
-      new User(11, 'Dr Nice', 'pass', 'Nazar', 'Dranhovskyi'),
-    ];
+    todos: Todo[] = [{id: 10, content: "Hello"},
+      {id: 10, content: "Hello"},
+      {id: 10, content: "Nazar"},
+      {id: 10, content: "Hello"},
+      {id: 10, content: "Hello"}];
 
-    todos: Todo[] = [];
-
-    constructor(private userService: UserService, private todoService: TodoService) {
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    constructor(private userService: UserService,
+                private todoService: TodoService) {
     }
 
     ngOnInit() {
         this.loadAllTodos();
     }
 
-    // deleteUser(id: number) {
-    //     this.userService.delete(id).pipe(first()).subscribe(() => {
-    //         this.loadAllTodos()
-    //     });
-    // }
+    deleteTodo(id: number) {
+        this.todoService.delete(id).pipe(first()).subscribe(() => {
+            this.loadAllTodos()
+        });
+    }
 
     private loadAllTodos() {
         this.todoService.getAll().pipe(first()).subscribe(todos => {
@@ -45,7 +40,19 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    onSelect(user: User): void {
-      this.selectedUser = user;
+    createTodo() {
+      this.loading = true;
+      let todo = new Todo(null, this.todoText);
+
+      this.todoText = "";
+
+      this.todoService.create(todo).pipe(first()).subscribe(() => {
+        this.loadAllTodos();
+        this.loading = false;
+      });
+    }
+
+    onSelect(todo: Todo): void {
+      this.currentTodo = todo;
     }
 }

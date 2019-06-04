@@ -2,26 +2,38 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import { Todo } from '../_models';
-import {UserService} from "./user.service";
 
 @Injectable()
 export class TodoService {
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient) { }
 
   getAll() {
-    var reqHeader = new HttpHeaders({
+    let reqHeader = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('currentUser'))
     });
-
-    return this.http.get<Todo[]>('http://localhost:8082/todos', { headers: reqHeader });
+    let response = this.http.get<Todo[]>('http://localhost:8082/todos', { headers: reqHeader });
+    console.log(response);
+    return response;
   }
 
   create(todo: Todo) {
-    return this.http.post(`/users/register`, todo);
+    let reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('currentUser'))
+    });
+    let response = this.http.post('http://localhost:8082/todos', todo, { headers: reqHeader });
+    console.log(response);
+    return response;
   }
 
   delete(id: number) {
-    return this.http.delete(`/users/` + id);
+    let reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('currentUser'))
+    });
+    let response = this.http.delete('http://localhost:8082/todos/' + id, { headers: reqHeader });
+    console.log(response);
+    return response;
   }
 }
