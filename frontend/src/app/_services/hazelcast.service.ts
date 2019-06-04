@@ -14,8 +14,9 @@ export class HazelcastService {
           let config = new Config.ClientConfig();
           config.networkConfig.addresses.push('0.0.0.0:5701');
 
-          HazelcastService.instance.client = Client.newHazelcastClient(config).then(function (client) {
+          Client.newHazelcastClient(config).then(function (client) {
               console.log(client);
+              HazelcastService.instance.client = client;
           });
       }
 
