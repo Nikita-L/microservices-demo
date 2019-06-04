@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Todo} from '../_models';
-import {TodoService, UserService} from '../_services';
+import {AlertService, TodoService, UserService} from '../_services';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -20,7 +20,8 @@ export class HomeComponent implements OnInit {
       {id: 10, content: "Hello"}];
 
     constructor(private userService: UserService,
-                private todoService: TodoService) {
+                private todoService: TodoService,
+                private alertService: AlertService) {
     }
 
     ngOnInit() {
@@ -30,14 +31,22 @@ export class HomeComponent implements OnInit {
     deleteTodo(id: number) {
         this.todoService.delete(id).pipe(first()).subscribe(() => {
             this.loadAllTodos()
-        });
+        },
+          error => {
+            this.alertService.error(error);
+            this.loading = false;
+          });
     }
 
     private loadAllTodos() {
         this.todoService.getAll().pipe(first()).subscribe(todos => {
             console.log(todos);
             this.todos = todos;
-        });
+        },
+          error => {
+            this.alertService.error(error);
+            this.loading = false;
+          });
     }
 
     createTodo() {
@@ -48,6 +57,10 @@ export class HomeComponent implements OnInit {
 
       this.todoService.create(todo).pipe(first()).subscribe(() => {
         this.loadAllTodos();
+        this.loading = false;
+      },
+      error => {
+        this.alertService.error(error);
         this.loading = false;
       });
     }
