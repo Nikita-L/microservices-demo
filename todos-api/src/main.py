@@ -78,8 +78,10 @@ def list_todos():
 
     result = []
     for doc in cursor:
-        doc['_id'] = str(doc['_id'])
-        result.append(doc)
+        result.append({
+            'id': str(doc['_id']),
+            'content': doc['content']
+        })
 
     print(result)
     return jsonify(result)
@@ -89,6 +91,8 @@ def list_todos():
 def add_todo():
     data = request.get_json()
     content = data.get('content')
+    if not content:
+        return 'No content', 400
     try:
         id_ = str(db.todos.insert_one({
             'username': g.username,
