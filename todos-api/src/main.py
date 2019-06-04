@@ -1,6 +1,7 @@
 import os
 import json
 import time
+from bson.objectid import ObjectId
 
 from flask import Flask, request, jsonify, g
 import redis
@@ -126,7 +127,7 @@ def add_todo():
 @app.route('/todos/<id_>', methods=['DELETE'])
 def delete_todo(id_):
     try:
-        db.todos.delete_one({'_id': id_, 'username': g.username})
+        db.todos.delete_one({'_id': ObjectId(id_), 'username': g.username})
     except:
         time.sleep(15)
         return 'DB problem, please wait', 400
@@ -148,7 +149,7 @@ def delete_todo(id_):
     pubsub.publish(redis_channel, json_mylist)
 
     print(f'Todo with id {id_} deleted')
-    return 'Ok', 200
+    return '', 200
 
 
 if __name__ == '__main__':
